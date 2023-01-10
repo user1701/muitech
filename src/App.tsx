@@ -115,7 +115,7 @@ export default function App() {
             </Grid>
             <Grid item xs={12} md={4}>
               <Typography variant='h4' gutterBottom>Color history</Typography>
-              <ColorHistory history={history} onRemoveClick={handleRemoveClick} />
+              <ColorHistory history={history} onPrimaryClick={handlePrimaryButtonClick} onRemoveClick={handleRemoveClick} />
             </Grid>
           </Grid>
         </Box>
