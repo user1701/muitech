@@ -8,16 +8,21 @@ import DeleteIcon from '@mui/icons-material/Delete';
 interface ColorHistoryItemProps {
     color: ColorType;
     onRemoveClick: () => void;
+    onPrimaryClick: () => void;
 }
 
 export const ColorHistoryItem: React.FC<ColorHistoryItemProps> = ({
     color,
-    onRemoveClick
+    onRemoveClick,
+    onPrimaryClick
 }) => {
     return (
         <div style={{ width: 80 }}>
             <Color code={color} />
             <Stack direction='column'>
+                <Button variant='contained' onClick={onPrimaryClick} sx={{ width: 80 }}>
+                    Primary
+                </Button>
                 <Button variant='outlined' onClick={onRemoveClick} sx={{ width: 80 }}>
                     <DeleteIcon />
                 </Button>
