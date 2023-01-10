@@ -1,14 +1,15 @@
-import { Grid, Stack, Typography } from '@mui/material';
+import { Grid, Typography } from '@mui/material';
 import React from 'react'
-import { HistoryType } from '../types'
+import { ColorType, HistoryType } from '../types'
 import ColorHistoryItem from './ColorHistoryItem';
 
 interface ColorHistoryProps {
     history: HistoryType;
+    onPrimaryClick: (color: ColorType) => () => void;
     onRemoveClick: (colorIndex: number) => () => void;
 }
 
-export const ColorHistory: React.FC<ColorHistoryProps> = ({ history, onRemoveClick }) => {
+export const ColorHistory: React.FC<ColorHistoryProps> = ({ history, onPrimaryClick, onRemoveClick }) => {
     return (
         <Grid container spacing={2} sx={{ alignContent: 'center', flexWrap: 'wrap' }}>
             {
@@ -16,7 +17,7 @@ export const ColorHistory: React.FC<ColorHistoryProps> = ({ history, onRemoveCli
                     (
                         <Grid item xs='auto'><Typography variant='h5'>history is empty</Typography></Grid>
                     ) : (
-                        history.map((color, idx) => <Grid item xs='auto'><ColorHistoryItem key={`${idx}${color}`} color={color} onRemoveClick={onRemoveClick(idx)} /></Grid>)
+                        history.map((color, idx) => <Grid item xs='auto'><ColorHistoryItem key={`${idx}${color}`} color={color} onPrimaryClick={onPrimaryClick(color)} onRemoveClick={onRemoveClick(idx)} /></Grid>)
                     )
             }
         </Grid>
