@@ -1,7 +1,7 @@
 import { ColorModeType, ColorType, LikedType, PaletteType } from './types';
 
 // Detect mode based on color brightness
-export function isLightColor(color: ColorType): ColorModeType {
+export function isLight(color: ColorType): ColorModeType {
     const hex = color.replace('#', '');
     const r = parseInt(hex.substring(0, 0 + 2), 16);
     const g = parseInt(hex.substring(2, 2 + 2), 16);
@@ -36,7 +36,14 @@ export function randomHexColorWithArray(arrayLength: number) {
 }
 
 // Generate new colors for not liked ones
-export function generatePalette(palette: PaletteType, liked: LikedType): PaletteType {
+export function generatePalette(
+    palette: PaletteType,
+    liked: LikedType
+): PaletteType {
+    if (liked.every((like) => like === true)) {
+        return palette;
+    }
+
     return palette.map((color, idx) =>
         liked[idx] ? color : randomHexColor()
     ) as PaletteType;

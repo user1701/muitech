@@ -8,31 +8,27 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { PaletteGenerator } from './features';
-import { ColorHistory, ColorModeType, ColorType, HistoryType } from './features/PaletteGenerator';
-import { generatePalette, isLightColor, randomHexColor, randomHexColorWithArray } from './features/PaletteGenerator/helpers';
+import { ColorHistory, ColorModeType, ColorType, HistoryType, usePaletteGenerator } from './features/PaletteGenerator';
+import { isLight, randomHexColor } from './features/PaletteGenerator/helpers';
 import { CssBaseline, Grid } from '@mui/material';
 
 type ThemeModeType = ColorModeType;
-type PaletteType = ColorType[];
-type LikedType = boolean[];
 
 const HISTORY_LENGTH = 5;
 const PALETTE_LENGTH = 8;
-const initialLiked = Array(PALETTE_LENGTH).fill(false);
-const initialPalette = randomHexColorWithArray(PALETTE_LENGTH) as PaletteType;
 const initialPrimaryColor = randomHexColor() as ColorType;
-const initialMode = isLightColor(initialPrimaryColor);
+const initialMode = isLight(initialPrimaryColor);
 
 export default function App() {
   const [mode, setMode] = useState<ThemeModeType>(initialMode);
   const [primaryColor, setPrimaryColor] = useState<ColorType>(initialPrimaryColor);
-  const [palette, setPalette] = useState<PaletteType>(initialPalette);
-  const [liked, setLiked] = useState<LikedType>(initialLiked);
   const [history, setHistory] = useState<HistoryType>([]);
+
+  const { palette, liked, handlers: { likeColor, generate } } = usePaletteGenerator(PALETTE_LENGTH);
 
 
   useEffect(() => {
-    setMode(isLightColor(primaryColor));
+    setMode(isLight(primaryColor));
   }, [primaryColor]);
 
   const theme = useMemo(
@@ -48,18 +44,6 @@ export default function App() {
     [mode, primaryColor],
   );
 
-  const handleLikeButtonClick = (colorIndex: number) => {
-    return () => {
-      setLiked((prevLiked) => {
-        const newLiked = [...prevLiked];
-        newLiked[colorIndex] = !liked[colorIndex];
-
-        return newLiked;
-      });
-    }
-
-  };
-
   const handlePrimaryButtonClick = (color: ColorType) => {
     return () => {
       setPrimaryColor(color);
@@ -72,9 +56,6 @@ export default function App() {
     }
   };
 
-  const handleGeneratePaletteClick = () => {
-    setPalette(generatePalette(palette, liked));
-  };
 
   const handleRemoveClick = (colorIndex: number) => {
     return () => {
@@ -108,9 +89,9 @@ export default function App() {
               <PaletteGenerator
                 palette={palette}
                 liked={liked}
-                onLikeClick={handleLikeButtonClick}
+                onLikeClick={likeColor}
                 onPrimaryClick={handlePrimaryButtonClick}
-                onGenerateClick={handleGeneratePaletteClick}
+                onGenerateClick={generate}
               />
             </Grid>
             <Grid item xs={12} md={4}>
