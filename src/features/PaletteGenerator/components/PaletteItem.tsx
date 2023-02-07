@@ -1,30 +1,32 @@
 import React from 'react'
-import { Button } from '@mui/material';
+import { Button, ButtonProps } from '@mui/material';
 import Color from './Color';
 
 import { ColorType } from '../types'
-import { Favorite, FavoriteBorder } from '@mui/icons-material';
 import { Stack } from '@mui/system';
+
+interface ActionItem {
+    variant: ButtonProps['variant'],
+    handler: () => void,
+    content: JSX.Element | string
+}
 
 interface PaletteItemProps {
     color: ColorType;
-    isLiked: boolean;
-    onPrimaryClick: () => void;
-    onLikeClick: () => void;
+    actions: ActionItem[] | undefined
+    keyModifier?: string;
 }
 
-export const PaletteItem: React.FC<PaletteItemProps> = ({ color, isLiked = false, onPrimaryClick, onLikeClick }) => {
+export const PaletteItem: React.FC<PaletteItemProps> = ({ color, actions, keyModifier = 'btn' }) => {
     return (
         <div>
             <Color code={color} />
-            <Stack direction='column'>
-                <Button variant='outlined' onClick={onLikeClick} sx={{ width: 80 }}>
-                    {isLiked ? <Favorite /> : <FavoriteBorder />}
-                </Button>
-                <Button variant='contained' onClick={onPrimaryClick} sx={{ width: 80 }}>
-                    Primary
-                </Button>
-            </Stack>
+            {Boolean(actions?.length) && (
+                <Stack direction='column'>
+                    {actions?.map(({ variant, handler, content }, idx) => <Button key={`${color}${keyModifier}${idx}`} variant={variant} onClick={handler} sx={{ width: 80, marginBottom: 1 }}>
+                        {content}
+                    </Button>)}
+                </Stack>)}
         </div>
     )
 }

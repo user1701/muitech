@@ -9,22 +9,22 @@ import { ThemeProvider, createTheme } from '@mui/material/styles';
 
 import { PaletteGenerator } from './features';
 import { ColorHistory, ColorModeType, ColorType, HistoryType, usePaletteGenerator } from './features/PaletteGenerator';
-import { isLight, randomHexColor } from './features/PaletteGenerator/helpers';
+import { isLight } from './features/PaletteGenerator/helpers';
 import { CssBaseline, Grid } from '@mui/material';
 
 type ThemeModeType = ColorModeType;
 
 const HISTORY_LENGTH = 5;
 const PALETTE_LENGTH = 8;
-const initialPrimaryColor = randomHexColor() as ColorType;
-const initialMode = isLight(initialPrimaryColor);
 
 export default function App() {
-  const [mode, setMode] = useState<ThemeModeType>(initialMode);
-  const [primaryColor, setPrimaryColor] = useState<ColorType>(initialPrimaryColor);
-  const [history, setHistory] = useState<HistoryType>([]);
-
   const { palette, liked, handlers: { likeColor, generate } } = usePaletteGenerator(PALETTE_LENGTH);
+  const initialPrimaryColor = palette[0];
+  const initialMode = isLight(initialPrimaryColor);
+
+  const [mode, setMode] = useState<ThemeModeType>(initialMode);
+  const [history, setHistory] = useState<HistoryType>([]);
+  const [primaryColor, setPrimaryColor] = useState<ColorType>(initialPrimaryColor);
 
 
   useEffect(() => {
